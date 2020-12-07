@@ -1,4 +1,3 @@
-
 class CubeModel {
   constructor({ flatCube }) {
     this.flatCube = flatCube;
@@ -44,6 +43,12 @@ class CubeModel {
     this.flatCube[1].splice(arrayIndex, 0, ...three);
     this.flatCube[2].splice(arrayIndex, 0, ...one);
   }
+
+  printFlatCube() {
+    this.flatCube.forEach((element) => {
+      console.log(element.join(' '));
+    })
+  }
 }
 
 //Node.js 실행 모듈
@@ -56,11 +61,17 @@ const useModule = ({ cubeModel }) => {
   rl.setPrompt('CUBE> ');
   rl.prompt();
   rl.on("line", (line) => {
-    cubeModel.inputWord[line.toUpperCase()]();
-    if (line.toUpperCase() === 'Q') {
-      rl.close();
-    }
-    console.table(cubeModel.flatCube);
+    console.log(); //한줄 띄어서 쓰기용
+    const lineArray = convertInputToArray(line);
+    lineArray.forEach((element) => {
+      cubeModel.inputWord[element.toUpperCase()]();
+      if (element.toUpperCase() === 'Q') {
+        rl.close();
+      }
+      console.log(element);
+      cubeModel.printFlatCube();
+      console.log(); //한줄 띄어서 쓰기용
+    })
     rl.prompt();
   })
   rl.on("close", () => {
@@ -68,13 +79,13 @@ const useModule = ({ cubeModel }) => {
   })
 }
 
-const convertInput = (line) => {
+const convertInputToArray = (line) => {
   const result = [];
-  for(let i = 0; i < line.length; i++){
-    if(line[i+1] && line[i+1] === '\''){
-      result.push(line.substring(i,i+2));
+  for (let i = 0; i < line.length; i++) {
+    if (line[i + 1] && line[i + 1] === '\'') {
+      result.push(line.substring(i, i + 2));
       i++;
-    }else{
+    } else {
       result.push(line[i]);
     }
   }
@@ -84,6 +95,7 @@ const convertInput = (line) => {
 //Node.js 실행하기
 const flatCube = [['R', 'R', 'W'], ['G', 'C', 'W'], ['G', 'B', 'B']];
 const cubeModel = new CubeModel({ flatCube });
-// useModule({ cubeModel });
-console.log(convertInput('U\'U\'U\'LLL\''));
+cubeModel.printFlatCube();
+console.log(); //한줄 띄어서 쓰기용
+useModule({ cubeModel });
 
