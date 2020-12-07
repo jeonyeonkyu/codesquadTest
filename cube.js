@@ -47,36 +47,28 @@ class CubeModel {
 }
 
 //Node.js 실행 모듈
-const useModule = () => {
+const useModule = ({ cubeModel }) => {
   const readline = require('readline');
   const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
   });
-  let input = [];
+  rl.setPrompt('CUBE> ');
+  rl.prompt();
   rl.on("line", function (line) {
-    input = receiveInput(line);
-    rl.close();
+    cubeModel.inputWord[line.toUpperCase()]();
+    if (line.toUpperCase() === 'Q') {
+      rl.close();
+    }
+    console.table(cubeModel.flatCube);
+    rl.prompt();
   })
   rl.on("close", function () {
-    
-    // process.exit();
+    process.exit();
   })
 }
-
-receiveInput = (line) => {
-  const input = line.split('');
-  return input;
-}
-
 
 //Node.js 실행하기
 const flatCube = [['R', 'R', 'W'], ['G', 'C', 'W'], ['G', 'B', 'B']];
 const cubeModel = new CubeModel({ flatCube });
-console.table(cubeModel.flatCube);
-cubeModel.inputWord['U']();
-cubeModel.inputWord['U']();
-cubeModel.inputWord['R']();
-console.table(model.flatCube);
-// process.stdout.write('CUBE> ');
-// useModule();
+useModule({ cubeModel });
