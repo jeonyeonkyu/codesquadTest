@@ -1,2 +1,8 @@
 # codesquadTest
-코드스쿼드 마스터즈코스 테스트
+
+##  1단계
+
++ Node.js로 readline을 사용하여 입력을 받음
++ receiveInput() 함수로 입력받은 단어들을 배열에 담기
++ calculationOutput() 함수 ↓
+  단어를 알파벳하나씩 배열에 담아 shift(),push(),pop(),unshift()를 활용하여 하나씩 밀어내기 구현
