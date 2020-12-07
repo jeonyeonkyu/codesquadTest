@@ -2,6 +2,17 @@
 class Model {
   constructor({ flatCube }) {
     this.flatCube = flatCube;
+    this.inputWord = {
+      'U': () => this.pushLeft(0),
+      'U\'': () => this.pushRight(0),
+      'R': () => this.pushUp(2),
+      'R\'': () => this.pushDown(2),
+      'L': () => this.pushDown(0),
+      'L\'': () => this.pushUp(0),
+      'B': () => this.pushRight(2),
+      'B\'': () => this.pushLeft(2),
+      'Q': () => console.log('Bye~')
+    }
   }
 
   pushLeft(arrayIndex) {
@@ -18,7 +29,7 @@ class Model {
     const one = this.flatCube[0].splice(arrayIndex, 1);
     const second = this.flatCube[1].splice(arrayIndex, 1);
     const three = this.flatCube[2].splice(arrayIndex, 1);
-    
+
     this.flatCube[0].splice(arrayIndex, 0, ...three);
     this.flatCube[1].splice(arrayIndex, 0, ...one);
     this.flatCube[2].splice(arrayIndex, 0, ...second);
@@ -28,15 +39,20 @@ class Model {
     const one = this.flatCube[0].splice(arrayIndex, 1);
     const second = this.flatCube[1].splice(arrayIndex, 1);
     const three = this.flatCube[2].splice(arrayIndex, 1);
-    
+
     this.flatCube[0].splice(arrayIndex, 0, ...second);
     this.flatCube[1].splice(arrayIndex, 0, ...three);
     this.flatCube[2].splice(arrayIndex, 0, ...one);
   }
 
+  getInputAndReplace(input) {
+    switch (input) {
+      case 'U':
+        pushLeft(0);
+        break;
+    }
+  }
 }
-
-
 
 //Node.js 실행 모듈
 const useModule = () => {
@@ -91,8 +107,9 @@ calculationOutput = (word, num, direction) => {
 const flatCube = [['R', 'R', 'W'], ['G', 'C', 'W'], ['G', 'B', 'B']];
 const model = new Model({ flatCube });
 console.table(model.flatCube);
-model.pushUp(0);
-model.pushDown(1);
+model.inputWord['U']();
+model.inputWord['U']();
+model.inputWord['R']();
 console.table(model.flatCube);
 // process.stdout.write('CUBE> ');
 // useModule();
