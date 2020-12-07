@@ -10,12 +10,11 @@ const useModule = () => {
 
   let input = [];
   rl.on("line", function (line) {
-    input = line.split(' ');
+    receiveInput(line);
     rl.close();
   })
 
   rl.on("close", function () {
-
     let A = input[0];
     let B = input[1];
     console.log(A + B);
@@ -23,7 +22,8 @@ const useModule = () => {
 }
 
 const receiveInput = (line) => {
-  
+  const input = line.split(' ');
+  return input;
 }
 
 
