@@ -1,18 +1,55 @@
+
+class Model {
+  constructor({ flatCube }) {
+    this.flatCube = flatCube;
+  }
+
+  pushLeft(arrayIndex) {
+    const temp = this.flatCube[arrayIndex].shift();
+    this.flatCube[arrayIndex].push(temp);
+  }
+
+  pushRight(arrayIndex) {
+    const temp = this.flatCube[arrayIndex].pop();
+    this.flatCube[arrayIndex].unshift(temp);
+  }
+
+  pushDown(arrayIndex) {
+    const one = this.flatCube[0].splice(arrayIndex, 1);
+    const second = this.flatCube[1].splice(arrayIndex, 1);
+    const three = this.flatCube[2].splice(arrayIndex, 1);
+    
+    this.flatCube[0].splice(arrayIndex, 0, ...three);
+    this.flatCube[1].splice(arrayIndex, 0, ...one);
+    this.flatCube[2].splice(arrayIndex, 0, ...second);
+  }
+
+  pushUp(arrayIndex) {
+    const one = this.flatCube[0].splice(arrayIndex, 1);
+    const second = this.flatCube[1].splice(arrayIndex, 1);
+    const three = this.flatCube[2].splice(arrayIndex, 1);
+    
+    this.flatCube[0].splice(arrayIndex, 0, ...second);
+    this.flatCube[1].splice(arrayIndex, 0, ...three);
+    this.flatCube[2].splice(arrayIndex, 0, ...one);
+  }
+
+}
+
+
+
 //Node.js 실행 모듈
 const useModule = () => {
   const readline = require('readline');
-
   const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
   });
-
   let input = [];
   rl.on("line", function (line) {
     input = receiveInput(line);
     rl.close();
   })
-
   rl.on("close", function () {
     const word = input[0];
     const num = input[1];
@@ -21,12 +58,12 @@ const useModule = () => {
   })
 }
 
-const receiveInput = (line) => {
-  const input = line.split(' ');
+receiveInput = (line) => {
+  const input = line.split('');
   return input;
 }
 
-const calculationOutput = (word, num, direction) => {
+calculationOutput = (word, num, direction) => {
   const wordArray = word.split('');
   const number = Number(num);
   let directionUppercase = direction.toUpperCase();
@@ -49,7 +86,13 @@ const calculationOutput = (word, num, direction) => {
   return wordArray.join('');
 }
 
+
 //Node.js 실행하기
-console.log('단어 하나, 정수 숫자하나, L또는 R을 공백으로 분리하여 순서대로 입력해주세요');
-console.log('ex) carrot -1 r');
-useModule();
+const flatCube = [['R', 'R', 'W'], ['G', 'C', 'W'], ['G', 'B', 'B']];
+const model = new Model({ flatCube });
+console.table(model.flatCube);
+model.pushUp(0);
+model.pushDown(1);
+console.table(model.flatCube);
+// process.stdout.write('CUBE> ');
+// useModule();
