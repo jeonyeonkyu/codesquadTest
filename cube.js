@@ -55,7 +55,7 @@ const useModule = ({ cubeModel }) => {
   });
   rl.setPrompt('CUBE> ');
   rl.prompt();
-  rl.on("line", function (line) {
+  rl.on("line", (line) => {
     cubeModel.inputWord[line.toUpperCase()]();
     if (line.toUpperCase() === 'Q') {
       rl.close();
@@ -63,12 +63,27 @@ const useModule = ({ cubeModel }) => {
     console.table(cubeModel.flatCube);
     rl.prompt();
   })
-  rl.on("close", function () {
+  rl.on("close", () => {
     process.exit();
   })
+}
+
+const convertInput = (line) => {
+  const result = [];
+  for(let i = 0; i < line.length; i++){
+    if(line[i+1] && line[i+1] === '\''){
+      result.push(line.substring(i,i+2));
+      i++;
+    }else{
+      result.push(line[i]);
+    }
+  }
+  return result;
 }
 
 //Node.js 실행하기
 const flatCube = [['R', 'R', 'W'], ['G', 'C', 'W'], ['G', 'B', 'B']];
 const cubeModel = new CubeModel({ flatCube });
-useModule({ cubeModel });
+// useModule({ cubeModel });
+console.log(convertInput('U\'U\'U\'LLL\''));
+
