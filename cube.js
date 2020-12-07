@@ -44,14 +44,6 @@ class CubeModel {
     this.flatCube[1].splice(arrayIndex, 0, ...three);
     this.flatCube[2].splice(arrayIndex, 0, ...one);
   }
-
-  getInputAndReplace(input) {
-    switch (input) {
-      case 'U':
-        pushLeft(0);
-        break;
-    }
-  }
 }
 
 //Node.js 실행 모듈
@@ -67,39 +59,14 @@ const useModule = () => {
     rl.close();
   })
   rl.on("close", function () {
-    const word = input[0];
-    const num = input[1];
-    const direction = input[2];
-    console.log(calculationOutput(word, num, direction));
+    
+    // process.exit();
   })
 }
 
 receiveInput = (line) => {
   const input = line.split('');
   return input;
-}
-
-calculationOutput = (word, num, direction) => {
-  const wordArray = word.split('');
-  const number = Number(num);
-  let directionUppercase = direction.toUpperCase();
-  if (number < 0) {
-    if (directionUppercase === 'L') {
-      directionUppercase = 'R';
-    } else if (directionUppercase === 'R') {
-      directionUppercase = 'L';
-    }
-  }
-  for (let i = 0; i < Math.abs(number); i++) {
-    if (directionUppercase === 'L') {
-      const temp = wordArray.shift();
-      wordArray.push(temp);
-    } else if (directionUppercase === 'R') {
-      const temp = wordArray.pop();
-      wordArray.unshift(temp);
-    }
-  }
-  return wordArray.join('');
 }
 
 
