@@ -1,5 +1,5 @@
 
-class Model {
+class CubeModel {
   constructor({ flatCube }) {
     this.flatCube = flatCube;
     this.inputWord = {
@@ -105,11 +105,11 @@ calculationOutput = (word, num, direction) => {
 
 //Node.js 실행하기
 const flatCube = [['R', 'R', 'W'], ['G', 'C', 'W'], ['G', 'B', 'B']];
-const model = new Model({ flatCube });
-console.table(model.flatCube);
-model.inputWord['U']();
-model.inputWord['U']();
-model.inputWord['R']();
+const cubeModel = new CubeModel({ flatCube });
+console.table(cubeModel.flatCube);
+cubeModel.inputWord['U']();
+cubeModel.inputWord['U']();
+cubeModel.inputWord['R']();
 console.table(model.flatCube);
 // process.stdout.write('CUBE> ');
 // useModule();
