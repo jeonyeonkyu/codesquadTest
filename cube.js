@@ -8,16 +8,16 @@ const useModule = () => {
   });
 
   let input = [];
-  rl.on("line", function (line) {
+  rl.on("line", (line) => {
     input = receiveInput(line);
     rl.close();
   })
-
-  rl.on("close", function () {
+  rl.on("close", () => {
     const word = input[0];
     const num = input[1];
     const direction = input[2];
     console.log(calculationOutput(word, num, direction));
+    process.exit();
   })
 }
 
