@@ -21,36 +21,27 @@ class CubeModel {
     }
   }
 
-  pushLeft(arrayIndex) {
-    const temp = this.flatCube[arrayIndex].shift();
-    this.flatCube[arrayIndex].push(temp);
+  aroundFlatBlockTurn(up, right, down, left) { //위, 오른쪽, 아래, 왼쪽을 90도 회전시키기
+    const [temp1, temp2, temp3] = [up[2][0], up[2][1], up[2][2]];
+    up[2][2] = left[0][2];
+    up[2][1] = left[1][2];
+    up[2][0] = left[2][2];
+    
+    left[0][2] = down[0][0];
+    left[1][2] = down[0][1];
+    left[2][2] = down[0][2];
+
+    down[0][0] = right[0][0];
+    down[0][1] = right[1][0];
+    down[0][2] = right[2][0];
+
+    right[0][0] = temp1;
+    right[1][0] = temp2;
+    right[2][0] = temp3;
   }
 
-  pushRight(arrayIndex) {
-    const temp = this.flatCube[arrayIndex].pop();
-    this.flatCube[arrayIndex].unshift(temp);
-  }
 
-  // pushDown(arrayIndex) {
-  //   const one = this.flatCube[0].splice(arrayIndex, 1);
-  //   const second = this.flatCube[1].splice(arrayIndex, 1);
-  //   const three = this.flatCube[2].splice(arrayIndex, 1);
-
-  //   this.flatCube[0].splice(arrayIndex, 0, ...three);
-  //   this.flatCube[1].splice(arrayIndex, 0, ...one);
-  //   this.flatCube[2].splice(arrayIndex, 0, ...second);
-  // }
-
-  // pushUp(arrayIndex) {
-  //   const one = this.flatCube[0].splice(arrayIndex, 1);
-  //   const second = this.flatCube[1].splice(arrayIndex, 1);
-  //   const three = this.flatCube[2].splice(arrayIndex, 1);
-
-  //   this.flatCube[0].splice(arrayIndex, 0, ...second);
-  //   this.flatCube[1].splice(arrayIndex, 0, ...three);
-  //   this.flatCube[2].splice(arrayIndex, 0, ...one);
-  // }
-  rotate90(array){
+  rotate90(array) { //시계방향으로 90도 회전
     const rotate = Array.from({ length: 3 }, () => new Array(3));
     for (let i = 0; i < rotate.length; i++) {
       for (let j = 0; j < rotate[i].length; j++) {
@@ -60,9 +51,8 @@ class CubeModel {
     return rotate;
   }
 
-  rotateMinus90(array){
+  rotateMinus90(array) { //반시계방향으로 90도 회전
     const rotate = Array.from({ length: 3 }, () => new Array(3));
-    console.log(rotate[2].length)
     for (let i = rotate.length - 1; i >= 0; i--) {
       for (let j = 0; j < rotate[i].length; j++) {
         rotate[2 - i][j] = array[j][i];
@@ -140,4 +130,6 @@ const cubeModel = new CubeModel();
 // console.log(); //한줄 띄어서 쓰기용
 // useModule({ cubeModel });
 
-// cubeModel.printFlatCube()
+cubeModel.printFlatCube()
+cubeModel.aroundFlatBlockTurn(cubeModel.flatCube.up,cubeModel.flatCube.back,cubeModel.flatCube.down,cubeModel.flatCube.front);
+cubeModel.printFlatCube()
