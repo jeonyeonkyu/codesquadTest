@@ -1,6 +1,8 @@
 class CubeModel {
-  constructor({ flatCube }) {
-    this.flatCube = flatCube;
+  constructor() {
+    this.flatCubeColorArray = ['B', 'W', 'O', 'G', 'Y', 'R'];
+    this.flatCube = this.flatCubeColorArray.map(element => 
+      Array.from({ length: 3 }, () => new Array(3).fill(element)));
     this.inputWord = {
       'U': () => this.pushLeft(0),
       'U\'': () => this.pushRight(0),
@@ -93,9 +95,10 @@ const convertInputToArray = (line) => {
 }
 
 //Node.js 실행하기
-const flatCube = [['R', 'R', 'W'], ['G', 'C', 'W'], ['G', 'B', 'B']];
-const cubeModel = new CubeModel({ flatCube });
-cubeModel.printFlatCube();
-console.log(); //한줄 띄어서 쓰기용
-useModule({ cubeModel });
 
+const cubeModel = new CubeModel();
+// cubeModel.printFlatCube();
+// console.log(); //한줄 띄어서 쓰기용
+// useModule({ cubeModel });
+
+console.table(cubeModel.flatCube)
