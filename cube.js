@@ -1,8 +1,13 @@
 class CubeModel {
   constructor() {
-    this.flatCubeColorArray = ['B', 'W', 'O', 'G', 'Y', 'R'];
-    this.flatCube = this.flatCubeColorArray.map(element => {
-      return {[element] : Array.from({ length: 3 }, () => new Array(3).fill(element))}})
+    this.flatCube = {
+      up: Array.from({ length: 3 }, () => new Array(3).fill('B')),
+      left: Array.from({ length: 3 }, () => new Array(3).fill('W')),
+      front: Array.from({ length: 3 }, () => new Array(3).fill('O')),
+      right: Array.from({ length: 3 }, () => new Array(3).fill('G')),
+      back: Array.from({ length: 3 }, () => new Array(3).fill('Y')),
+      down: Array.from({ length: 3 }, () => new Array(3).fill('R'))
+    }
     this.inputWord = {
       'U': () => this.pushLeft(0),
       'U\'': () => this.pushRight(0),
@@ -47,20 +52,20 @@ class CubeModel {
   // }
 
   printFlatCube() { //큐브 출력하기
-    this.flatCube[0].forEach(element => {
+    this.flatCube[Object.keys(this.flatCube)[0]].forEach(element => {
       process.stdout.write('        ');
       console.log(element.join(' '));
     })
     console.log();
     for (let i = 0; i < 3; i++) {
       for (let j = 1; j < 5; j++) {
-        process.stdout.write(this.flatCube[j][i].join(' '));
+        process.stdout.write(this.flatCube[Object.keys(this.flatCube)[j]][i].join(' '));
         process.stdout.write('   ');
       }
       console.log();
     }
     console.log();
-    this.flatCube[5].forEach(element => {
+    this.flatCube[Object.keys(this.flatCube)[5]].forEach(element => {
       process.stdout.write('        ');
       console.log(element.join(' '));
     })
@@ -114,6 +119,4 @@ const cubeModel = new CubeModel();
 // cubeModel.printFlatCube();
 // console.log(); //한줄 띄어서 쓰기용
 // useModule({ cubeModel });
-
-// cubeModel.printFlatCube()
-console.dir(cubeModel.flatCube,{depth:null});
+cubeModel.printFlatCube()
