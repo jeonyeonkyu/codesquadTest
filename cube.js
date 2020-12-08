@@ -26,7 +26,7 @@ class CubeModel {
     up[2][2] = left[0][2];
     up[2][1] = left[1][2];
     up[2][0] = left[2][2];
-    
+
     left[0][2] = down[0][0];
     left[1][2] = down[0][1];
     left[2][2] = down[0][2];
@@ -41,24 +41,30 @@ class CubeModel {
   }
 
 
-  rotate90(array) { //시계방향으로 90도 회전
+  rotate90(frontSide) { //시계방향으로 90도 회전
     const rotate = Array.from({ length: 3 }, () => new Array(3));
     for (let i = 0; i < rotate.length; i++) {
       for (let j = 0; j < rotate[i].length; j++) {
-        rotate[i][j] = array[2 - j][i];
+        rotate[i][j] = frontSide[2 - j][i];
       }
     }
-    return rotate;
+    this.copyArrayValuesOnly(frontSide, rotate);
   }
 
-  rotateMinus90(array) { //반시계방향으로 90도 회전
+  rotateMinus90(frontSide) { //반시계방향으로 90도 회전
     const rotate = Array.from({ length: 3 }, () => new Array(3));
     for (let i = rotate.length - 1; i >= 0; i--) {
       for (let j = 0; j < rotate[i].length; j++) {
-        rotate[2 - i][j] = array[j][i];
+        rotate[2 - i][j] = frontSide[j][i];
       }
     }
-    return rotate;
+    this.copyArrayValuesOnly(frontSide, rotate);
+  }
+
+  copyArrayValuesOnly(original, target) { //참조를 복사하는 것이 아닌 값 복사
+    original.forEach((_, i) => {
+      original[i] = target[i];
+    })
   }
 
   printFlatCube() { //큐브 출력하기
@@ -69,7 +75,8 @@ class CubeModel {
     console.log();
     for (let i = 0; i < 3; i++) {
       for (let j = 1; j < 5; j++) {
-        process.stdout.write(this.flatCube[Object.keys(this.flatCube)[j]][i].join(' '));
+        process.stdout.write(this.flatCube[Object.keys(this.flatCube)[j]][i]
+          .join(' '));
         process.stdout.write('   ');
       }
       console.log();
@@ -110,6 +117,8 @@ const useModule = ({ cubeModel }) => {
   })
 }
 
+
+
 const convertInputToArray = (line) => {
   const result = [];
   for (let i = 0; i < line.length; i++) {
@@ -123,6 +132,7 @@ const convertInputToArray = (line) => {
   return result;
 }
 
+
 //Node.js 실행하기
 
 const cubeModel = new CubeModel();
@@ -131,5 +141,6 @@ const cubeModel = new CubeModel();
 // useModule({ cubeModel });
 
 cubeModel.printFlatCube()
-cubeModel.aroundFlatBlockTurn(cubeModel.flatCube.up,cubeModel.flatCube.back,cubeModel.flatCube.down,cubeModel.flatCube.front);
+cubeModel.aroundFlatBlockTurn(cubeModel.flatCube.up, cubeModel.flatCube.back, cubeModel.flatCube.down, cubeModel.flatCube.front);
+cubeModel.rotate90(cubeModel.flatCube.front);
 cubeModel.printFlatCube()
