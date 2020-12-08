@@ -1,7 +1,7 @@
 class CubeModel {
   constructor() {
     this.flatCubeColorArray = ['B', 'W', 'O', 'G', 'Y', 'R'];
-    this.flatCube = this.flatCubeColorArray.map(element => 
+    this.flatCube = this.flatCubeColorArray.map(element =>
       Array.from({ length: 3 }, () => new Array(3).fill(element)));
     this.inputWord = {
       'U': () => this.pushLeft(0),
@@ -46,8 +46,22 @@ class CubeModel {
     this.flatCube[2].splice(arrayIndex, 0, ...one);
   }
 
-  printFlatCube() {
-    this.flatCube.forEach((element) => {
+  printFlatCube() { //큐브 출력하기
+    this.flatCube[0].forEach(element => {
+      process.stdout.write('        ');
+      console.log(element.join(' '));
+    })
+    console.log();
+    for (let i = 0; i < 3; i++) {
+      for (let j = 1; j < 5; j++) {
+        process.stdout.write(this.flatCube[j][i].join(' '));
+        process.stdout.write('   ');
+      }
+      console.log();
+    }
+    console.log();
+    this.flatCube[5].forEach(element => {
+      process.stdout.write('        ');
       console.log(element.join(' '));
     })
   }
@@ -101,4 +115,4 @@ const cubeModel = new CubeModel();
 // console.log(); //한줄 띄어서 쓰기용
 // useModule({ cubeModel });
 
-console.table(cubeModel.flatCube)
+cubeModel.printFlatCube()
