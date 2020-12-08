@@ -1,8 +1,8 @@
 class CubeModel {
   constructor() {
     this.flatCubeColorArray = ['B', 'W', 'O', 'G', 'Y', 'R'];
-    this.flatCube = this.flatCubeColorArray.map(element =>
-      Array.from({ length: 3 }, () => new Array(3).fill(element)));
+    this.flatCube = this.flatCubeColorArray.map(element => {
+      return {[element] : Array.from({ length: 3 }, () => new Array(3).fill(element))}})
     this.inputWord = {
       'U': () => this.pushLeft(0),
       'U\'': () => this.pushRight(0),
@@ -26,25 +26,25 @@ class CubeModel {
     this.flatCube[arrayIndex].unshift(temp);
   }
 
-  pushDown(arrayIndex) {
-    const one = this.flatCube[0].splice(arrayIndex, 1);
-    const second = this.flatCube[1].splice(arrayIndex, 1);
-    const three = this.flatCube[2].splice(arrayIndex, 1);
+  // pushDown(arrayIndex) {
+  //   const one = this.flatCube[0].splice(arrayIndex, 1);
+  //   const second = this.flatCube[1].splice(arrayIndex, 1);
+  //   const three = this.flatCube[2].splice(arrayIndex, 1);
 
-    this.flatCube[0].splice(arrayIndex, 0, ...three);
-    this.flatCube[1].splice(arrayIndex, 0, ...one);
-    this.flatCube[2].splice(arrayIndex, 0, ...second);
-  }
+  //   this.flatCube[0].splice(arrayIndex, 0, ...three);
+  //   this.flatCube[1].splice(arrayIndex, 0, ...one);
+  //   this.flatCube[2].splice(arrayIndex, 0, ...second);
+  // }
 
-  pushUp(arrayIndex) {
-    const one = this.flatCube[0].splice(arrayIndex, 1);
-    const second = this.flatCube[1].splice(arrayIndex, 1);
-    const three = this.flatCube[2].splice(arrayIndex, 1);
+  // pushUp(arrayIndex) {
+  //   const one = this.flatCube[0].splice(arrayIndex, 1);
+  //   const second = this.flatCube[1].splice(arrayIndex, 1);
+  //   const three = this.flatCube[2].splice(arrayIndex, 1);
 
-    this.flatCube[0].splice(arrayIndex, 0, ...second);
-    this.flatCube[1].splice(arrayIndex, 0, ...three);
-    this.flatCube[2].splice(arrayIndex, 0, ...one);
-  }
+  //   this.flatCube[0].splice(arrayIndex, 0, ...second);
+  //   this.flatCube[1].splice(arrayIndex, 0, ...three);
+  //   this.flatCube[2].splice(arrayIndex, 0, ...one);
+  // }
 
   printFlatCube() { //큐브 출력하기
     this.flatCube[0].forEach(element => {
@@ -115,4 +115,5 @@ const cubeModel = new CubeModel();
 // console.log(); //한줄 띄어서 쓰기용
 // useModule({ cubeModel });
 
-cubeModel.printFlatCube()
+// cubeModel.printFlatCube()
+console.dir(cubeModel.flatCube,{depth:null});
