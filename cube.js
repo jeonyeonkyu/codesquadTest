@@ -50,6 +50,26 @@ class CubeModel {
   //   this.flatCube[1].splice(arrayIndex, 0, ...three);
   //   this.flatCube[2].splice(arrayIndex, 0, ...one);
   // }
+  rotate90(array){
+    const rotate = Array.from({ length: 3 }, () => new Array(3));
+    for (let i = 0; i < rotate.length; i++) {
+      for (let j = 0; j < rotate[i].length; j++) {
+        rotate[i][j] = array[2 - j][i];
+      }
+    }
+    return rotate;
+  }
+
+  rotateMinus90(array){
+    const rotate = Array.from({ length: 3 }, () => new Array(3));
+    console.log(rotate[2].length)
+    for (let i = rotate.length - 1; i >= 0; i--) {
+      for (let j = 0; j < rotate[i].length; j++) {
+        rotate[2 - i][j] = array[j][i];
+      }
+    }
+    return rotate;
+  }
 
   printFlatCube() { //큐브 출력하기
     this.flatCube[Object.keys(this.flatCube)[0]].forEach(element => {
@@ -119,4 +139,5 @@ const cubeModel = new CubeModel();
 // cubeModel.printFlatCube();
 // console.log(); //한줄 띄어서 쓰기용
 // useModule({ cubeModel });
-cubeModel.printFlatCube()
+
+// cubeModel.printFlatCube()
