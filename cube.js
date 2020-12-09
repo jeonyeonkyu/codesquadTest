@@ -21,6 +21,19 @@ class CubeModel {
     }
   }
 
+
+  rotationOnceFull(front, up, right, down, left, angle) {
+    this.rotationFrontSide(front, angle);
+    if (angle === '90') { //1번 돌려서 90도 각도로 회전시키기
+      this.aroundFlatBlockTurn(up, right, down, left);
+    } else if (angle === '-90') { //3번 돌려서 -90도(270도) 각도로 회전시키기
+      for (let i = 0; i < 3; i++) {
+        this.aroundFlatBlockTurn(up, right, down, left);
+      }
+    }
+  }
+
+
   aroundFlatBlockTurn(up, right, down, left) { //위, 오른쪽, 아래, 왼쪽을 90도 회전시키기
     const [temp1, temp2, temp3] = [up[2][0], up[2][1], up[2][2]];
     up[2][2] = left[0][2];
@@ -40,15 +53,13 @@ class CubeModel {
     right[2][0] = temp3;
   }
 
-
-  frontSideRotation(frontSide, angle) {
+  rotationFrontSide(frontSide, angle) {  //angle = 90 or -90
     const rotate = angle === '90' ?
       this.rotate90(frontSide) : this.rotateMinus90(frontSide);
-
     this.copyArrayValuesOnly(frontSide, rotate);
   }
 
-  rotate90(frontSide) { //시계방향으로 90도 회전
+  rotate90(frontSide) { //정면에 있는 배열을 시계방향으로 90도 회전
     const rotate = Array.from({ length: 3 }, () => new Array(3));
     for (let i = 0; i < rotate.length; i++) {
       for (let j = 0; j < rotate[i].length; j++) {
@@ -58,7 +69,7 @@ class CubeModel {
     return rotate;
   }
 
-  rotateMinus90(frontSide) { //반시계방향으로 90도 회전
+  rotateMinus90(frontSide) { //정면에 있는 배열을 반시계방향으로 90도 회전
     const rotate = Array.from({ length: 3 }, () => new Array(3));
     for (let i = rotate.length - 1; i >= 0; i--) {
       for (let j = 0; j < rotate[i].length; j++) {
@@ -66,7 +77,6 @@ class CubeModel {
       }
     }
     return rotate;
-
   }
 
   copyArrayValuesOnly(original, target) { //참조를 복사하는 것이 아닌 값 복사
@@ -125,8 +135,6 @@ const useModule = ({ cubeModel }) => {
   })
 }
 
-
-
 const convertInputToArray = (line) => {
   const result = [];
   for (let i = 0; i < line.length; i++) {
@@ -149,6 +157,5 @@ const cubeModel = new CubeModel();
 // useModule({ cubeModel });
 
 cubeModel.printFlatCube()
-cubeModel.aroundFlatBlockTurn(cubeModel.flatCube.up, cubeModel.flatCube.back, cubeModel.flatCube.down, cubeModel.flatCube.front);
-cubeModel.frontSideRotation(cubeModel.flatCube.front, '90')
+cubeModel.rotationOnceFull(cubeModel.flatCube.front, cubeModel.flatCube.up, cubeModel.flatCube.right, cubeModel.flatCube.down, cubeModel.flatCube.left, '90');
 cubeModel.printFlatCube()
