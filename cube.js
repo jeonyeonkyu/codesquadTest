@@ -8,15 +8,105 @@ class CubeModel {
       back: Array.from({ length: 3 }, () => new Array(3).fill('Y')),
       down: Array.from({ length: 3 }, () => new Array(3).fill('R'))
     }
+    const { up, left, front, right, back, down } = this.flatCube;
     this.inputWord = {
-      'U': () => this.pushLeft(0),
-      'U\'': () => this.pushRight(0),
-      'R': () => this.pushUp(2),
-      'R\'': () => this.pushDown(2),
-      'L': () => this.pushDown(0),
-      'L\'': () => this.pushUp(0),
-      'B': () => this.pushRight(2),
-      'B\'': () => this.pushLeft(2),
+      'F': () => this.rotationOnceFull(front, up, right, down, left, '90'),
+      'F\'': () => this.rotationOnceFull(front, up, right, down, left, '-90'),
+      'R': () => {
+        this.rotationFrontSide(up, '90');
+        this.rotationFrontSide(down, '-90');
+        this.rotationOnceFull(right, up, back, down, front, '90');
+        this.rotationFrontSide(up, '-90');
+        this.rotationFrontSide(down, '90');
+      },
+      'R\'': () => {
+        this.rotationFrontSide(up, '90');
+        this.rotationFrontSide(down, '-90');
+        this.rotationOnceFull(right, up, back, down, front, '-90');
+        this.rotationFrontSide(up, '-90');
+        this.rotationFrontSide(down, '90');
+      },
+      'L': () => {
+        this.rotationFrontSide(up, '-90');
+        this.rotationFrontSide(down, '90');
+        this.rotationOnceFull(left, up, front, down, back, '90');
+        this.rotationFrontSide(up, '90');
+        this.rotationFrontSide(down, '-90');
+      },
+      'L\'': () => {
+        this.rotationFrontSide(up, '-90');
+        this.rotationFrontSide(down, '90');
+        this.rotationOnceFull(left, up, front, down, back, '-90');
+        this.rotationFrontSide(up, '90');
+        this.rotationFrontSide(down, '-90');
+      },
+      'B': () => {
+        this.rotationFrontSide(up, '90');
+        this.rotationFrontSide(up, '90');
+        this.rotationFrontSide(down, '-90');
+        this.rotationFrontSide(down, '-90');
+        this.rotationOnceFull(back, up, left, down, right, '90');
+        this.rotationFrontSide(up, '-90');
+        this.rotationFrontSide(up, '-90');
+        this.rotationFrontSide(down, '90');
+        this.rotationFrontSide(down, '90');
+      },
+      'B\'': () => {
+        this.rotationFrontSide(up, '90');
+        this.rotationFrontSide(up, '90');
+        this.rotationFrontSide(down, '-90');
+        this.rotationFrontSide(down, '-90');
+        this.rotationOnceFull(back, up, left, down, right, '-90');
+        this.rotationFrontSide(up, '-90');
+        this.rotationFrontSide(up, '-90');
+        this.rotationFrontSide(down, '90');
+        this.rotationFrontSide(down, '90');
+      },
+      'U': () => {
+        this.rotationFrontSide(back, '90');
+        this.rotationFrontSide(back, '90');
+        this.rotationFrontSide(right, '-90');
+        this.rotationFrontSide(left, '90');
+        this.rotationOnceFull(up, back, right, front, left, '90');
+        this.rotationFrontSide(back, '-90');
+        this.rotationFrontSide(back, '-90');
+        this.rotationFrontSide(right, '90');
+        this.rotationFrontSide(left, '-90');
+      },
+      'U\'': () => {
+        this.rotationFrontSide(back, '90');
+        this.rotationFrontSide(back, '90');
+        this.rotationFrontSide(right, '-90');
+        this.rotationFrontSide(left, '90');
+        this.rotationOnceFull(up, back, right, front, left, '-90');
+        this.rotationFrontSide(back, '-90');
+        this.rotationFrontSide(back, '-90');
+        this.rotationFrontSide(right, '90');
+        this.rotationFrontSide(left, '-90');
+      }
+      ,
+      'D': () => {
+        this.rotationFrontSide(right, '90');
+        this.rotationFrontSide(back, '90');
+        this.rotationFrontSide(back, '90');
+        this.rotationFrontSide(left, '-90');
+        this.rotationOnceFull(down, front, right, back, left, '90');
+        this.rotationFrontSide(right, '-90');
+        this.rotationFrontSide(back, '-90');
+        this.rotationFrontSide(back, '-90');
+        this.rotationFrontSide(left, '90');
+      },
+      'D\'': () => {
+        this.rotationFrontSide(right, '90');
+        this.rotationFrontSide(back, '90');
+        this.rotationFrontSide(back, '90');
+        this.rotationFrontSide(left, '-90');
+        this.rotationOnceFull(down, front, right, back, left, '-90');
+        this.rotationFrontSide(right, '-90');
+        this.rotationFrontSide(back, '-90');
+        this.rotationFrontSide(back, '-90');
+        this.rotationFrontSide(left, '90');
+      },
       'Q': () => console.log('Bye~')
     }
   }
@@ -44,9 +134,9 @@ class CubeModel {
     left[1][2] = down[0][1];
     left[2][2] = down[0][2];
 
-    down[0][0] = right[0][0];
+    down[0][2] = right[0][0];
     down[0][1] = right[1][0];
-    down[0][2] = right[2][0];
+    down[0][0] = right[2][0];
 
     right[0][0] = temp1;
     right[1][0] = temp2;
@@ -152,10 +242,6 @@ const convertInputToArray = (line) => {
 //Node.js 실행하기
 
 const cubeModel = new CubeModel();
-// cubeModel.printFlatCube();
-// console.log(); //한줄 띄어서 쓰기용
-// useModule({ cubeModel });
-
-cubeModel.printFlatCube()
-cubeModel.rotationOnceFull(cubeModel.flatCube.front, cubeModel.flatCube.up, cubeModel.flatCube.right, cubeModel.flatCube.down, cubeModel.flatCube.left, '90');
-cubeModel.printFlatCube()
+cubeModel.printFlatCube();
+console.log(); //한줄 띄어서 쓰기용
+useModule({ cubeModel });
