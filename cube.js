@@ -41,6 +41,13 @@ class CubeModel {
   }
 
 
+  frontSideRotation(frontSide, angle) {
+    const rotate = angle === '90' ?
+      this.rotate90(frontSide) : this.rotateMinus90(frontSide);
+
+    this.copyArrayValuesOnly(frontSide, rotate);
+  }
+
   rotate90(frontSide) { //시계방향으로 90도 회전
     const rotate = Array.from({ length: 3 }, () => new Array(3));
     for (let i = 0; i < rotate.length; i++) {
@@ -48,7 +55,7 @@ class CubeModel {
         rotate[i][j] = frontSide[2 - j][i];
       }
     }
-    this.copyArrayValuesOnly(frontSide, rotate);
+    return rotate;
   }
 
   rotateMinus90(frontSide) { //반시계방향으로 90도 회전
@@ -58,7 +65,8 @@ class CubeModel {
         rotate[2 - i][j] = frontSide[j][i];
       }
     }
-    this.copyArrayValuesOnly(frontSide, rotate);
+    return rotate;
+
   }
 
   copyArrayValuesOnly(original, target) { //참조를 복사하는 것이 아닌 값 복사
@@ -142,5 +150,5 @@ const cubeModel = new CubeModel();
 
 cubeModel.printFlatCube()
 cubeModel.aroundFlatBlockTurn(cubeModel.flatCube.up, cubeModel.flatCube.back, cubeModel.flatCube.down, cubeModel.flatCube.front);
-cubeModel.rotate90(cubeModel.flatCube.front);
+cubeModel.frontSideRotation(cubeModel.flatCube.front, '90')
 cubeModel.printFlatCube()
