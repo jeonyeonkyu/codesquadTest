@@ -25,11 +25,11 @@ class CubeModel {
     }
   }
 
-  changeF({front, up, right, down, left}, angle) {
+  changeF({ front, up, right, down, left }, angle) {
     this.rotationOnceFull(front, up, right, down, left, angle);
   }
 
-  changeR({right, up, back, down, front}, angle) {
+  changeR({ right, up, back, down, front }, angle) {
     this.rotationFrontSide(up, '90');
     this.rotationFrontSide(down, '-90');
     this.rotationOnceFull(right, up, back, down, front, angle);
@@ -37,7 +37,7 @@ class CubeModel {
     this.rotationFrontSide(down, '90');
   }
 
-  changeL({left, up, front, down, back}, angle) {
+  changeL({ left, up, front, down, back }, angle) {
     this.rotationFrontSide(up, '-90');
     this.rotationFrontSide(down, '90');
     this.rotationOnceFull(left, up, front, down, back, angle);
@@ -45,7 +45,7 @@ class CubeModel {
     this.rotationFrontSide(down, '-90');
   }
 
-  changeB({back, up, left, down, right}, angle) {
+  changeB({ back, up, left, down, right }, angle) {
     this.rotationFrontSide(up, '90');
     this.rotationFrontSide(up, '90');
     this.rotationFrontSide(down, '-90');
@@ -57,7 +57,7 @@ class CubeModel {
     this.rotationFrontSide(down, '90');
   }
 
-  changeU({up, back, right, front, left}, angle) {
+  changeU({ up, back, right, front, left }, angle) {
     this.rotationFrontSide(back, '90');
     this.rotationFrontSide(back, '90');
     this.rotationFrontSide(right, '-90');
@@ -69,7 +69,7 @@ class CubeModel {
     this.rotationFrontSide(left, '-90');
   }
 
-  changeD({down, front, right, back, left}, angle) {
+  changeD({ down, front, right, back, left }, angle) {
     this.rotationFrontSide(right, '90');
     this.rotationFrontSide(back, '90');
     this.rotationFrontSide(back, '90');
@@ -166,7 +166,7 @@ class CubeModel {
 }
 
 //Node.js 실행 모듈
-const useModule = ({ cubeModel }) => {
+const useModule = ({ cubeModel }, { count, time }) => {
   const readline = require('readline');
   const rl = readline.createInterface({
     input: process.stdin,
@@ -180,8 +180,12 @@ const useModule = ({ cubeModel }) => {
     lineArray.forEach((element) => {
       cubeModel.inputWord[element.toUpperCase()]();
       if (element.toUpperCase() === 'Q') {
+        console.log(`경과시간: ${(new Date(Date.now() - time))
+          .toISOString().slice(14, 19)}초`);
+        console.log(`조작갯수: ${count}`)
         rl.close();
       }
+      count++;
       console.log(element);
       cubeModel.printFlatCube();
       console.log(); //한줄 띄어서 쓰기용
@@ -206,8 +210,14 @@ const convertInputToArray = (line) => {
   return result;
 }
 
+
+
 //Node.js 실행하기
 const cubeModel = new CubeModel();
+const run = {
+  count: 0,
+  time: Date.now()
+};
 cubeModel.printFlatCube();
 console.log(); //한줄 띄어서 쓰기용
-useModule({ cubeModel });
+useModule({ cubeModel }, run);
