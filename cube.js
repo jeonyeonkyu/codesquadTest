@@ -181,7 +181,7 @@ const useModule = ({ cubeModel }, { count, time }) => {
       cubeModel.inputWord[element.toUpperCase()]();
       if (element.toUpperCase() === 'Q') {
         console.log(`경과시간: ${(new Date(Date.now() - time))
-          .toISOString().slice(14, 19)}초`);
+          .toISOString().slice(14, 19)}`);
         console.log(`조작갯수: ${count}`)
         rl.close();
       }
@@ -211,13 +211,9 @@ const convertInputToArray = (line) => {
 }
 
 
-
 //Node.js 실행하기
+const run = { count: 0, time: Date.now() };
 const cubeModel = new CubeModel();
-const run = {
-  count: 0,
-  time: Date.now()
-};
 cubeModel.printFlatCube();
 console.log(); //한줄 띄어서 쓰기용
 useModule({ cubeModel }, run);
