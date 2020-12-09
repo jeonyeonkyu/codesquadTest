@@ -1,55 +1,101 @@
-//Node.js 실행 모듈
-const useModule = () => {
-  const readline = require('readline');
+class CubeModel {
+  constructor({ flatCube }) {
+    this.flatCube = flatCube;
+    this.inputWord = {
+      'U': () => this.pushLeft(0),
+      'U\'': () => this.pushRight(0),
+      'R': () => this.pushUp(2),
+      'R\'': () => this.pushDown(2),
+      'L': () => this.pushDown(0),
+      'L\'': () => this.pushUp(0),
+      'B': () => this.pushRight(2),
+      'B\'': () => this.pushLeft(2),
+      'Q': () => console.log('Bye~')
+    }
+  }
 
+  pushLeft(arrayIndex) {
+    const temp = this.flatCube[arrayIndex].shift();
+    this.flatCube[arrayIndex].push(temp);
+  }
+
+  pushRight(arrayIndex) {
+    const temp = this.flatCube[arrayIndex].pop();
+    this.flatCube[arrayIndex].unshift(temp);
+  }
+
+  pushDown(arrayIndex) {
+    const one = this.flatCube[0].splice(arrayIndex, 1);
+    const second = this.flatCube[1].splice(arrayIndex, 1);
+    const three = this.flatCube[2].splice(arrayIndex, 1);
+
+    this.flatCube[0].splice(arrayIndex, 0, ...three);
+    this.flatCube[1].splice(arrayIndex, 0, ...one);
+    this.flatCube[2].splice(arrayIndex, 0, ...second);
+  }
+
+  pushUp(arrayIndex) {
+    const one = this.flatCube[0].splice(arrayIndex, 1);
+    const second = this.flatCube[1].splice(arrayIndex, 1);
+    const three = this.flatCube[2].splice(arrayIndex, 1);
+
+    this.flatCube[0].splice(arrayIndex, 0, ...second);
+    this.flatCube[1].splice(arrayIndex, 0, ...three);
+    this.flatCube[2].splice(arrayIndex, 0, ...one);
+  }
+
+  printFlatCube() {
+    this.flatCube.forEach((element) => {
+      console.log(element.join(' '));
+    })
+  }
+}
+
+//Node.js 실행 모듈
+const useModule = ({ cubeModel }) => {
+  const readline = require('readline');
   const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
   });
-
-  let input = [];
+  rl.setPrompt('CUBE> ');
+  rl.prompt();
   rl.on("line", (line) => {
-    input = receiveInput(line);
-    rl.close();
+    console.log(); //한줄 띄어서 쓰기용
+    const lineArray = convertInputToArray(line);
+    lineArray.forEach((element) => {
+      cubeModel.inputWord[element.toUpperCase()]();
+      if (element.toUpperCase() === 'Q') {
+        rl.close();
+      }
+      console.log(element);
+      cubeModel.printFlatCube();
+      console.log(); //한줄 띄어서 쓰기용
+    })
+    rl.prompt();
   })
   rl.on("close", () => {
-    const word = input[0];
-    const num = input[1];
-    const direction = input[2];
-    console.log(calculationOutput(word, num, direction));
     process.exit();
   })
 }
 
-const receiveInput = (line) => {
-  const input = line.split(' ');
-  return input;
-}
-
-const calculationOutput = (word, num, direction) => {
-  const wordArray = word.split('');
-  const number = Number(num);
-  let directionUppercase = direction.toUpperCase();
-  if (number < 0) {
-    if (directionUppercase === 'L') {
-      directionUppercase = 'R';
-    } else if (directionUppercase === 'R') {
-      directionUppercase = 'L';
+const convertInputToArray = (line) => {
+  const result = [];
+  for (let i = 0; i < line.length; i++) {
+    if (line[i + 1] && line[i + 1] === '\'') {
+      result.push(line.substring(i, i + 2));
+      i++;
+    } else {
+      result.push(line[i]);
     }
   }
-  for (let i = 0; i < Math.abs(number); i++) {
-    if (directionUppercase === 'L') {
-      const temp = wordArray.shift();
-      wordArray.push(temp);
-    } else if (directionUppercase === 'R') {
-      const temp = wordArray.pop();
-      wordArray.unshift(temp);
-    }
-  }
-  return wordArray.join('');
+  return result;
 }
 
 //Node.js 실행하기
-console.log('단어 하나, 정수 숫자하나, L또는 R을 공백으로 분리하여 순서대로 입력해주세요');
-console.log('ex) carrot -1 r');
-useModule();
+const flatCube = [['R', 'R', 'W'], ['G', 'C', 'W'], ['G', 'B', 'B']];
+const cubeModel = new CubeModel({ flatCube });
+cubeModel.printFlatCube();
+console.log(); //한줄 띄어서 쓰기용
+useModule({ cubeModel });
+
