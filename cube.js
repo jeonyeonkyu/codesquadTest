@@ -203,6 +203,10 @@ const convertInputToArray = (line) => {
     if (line[i + 1] && line[i + 1] === '\'') {
       result.push(line.substring(i, i + 2));
       i++;
+    } else if (line[i + 1] && line[i + 1] === '2') {
+      result.push(line[i]);
+      result.push(line[i]);
+      i++;
     } else {
       result.push(line[i]);
     }
