@@ -174,6 +174,21 @@ class CubeModel {
       console.log(element.join(' '));
     })
   }
+
+  checkComplete() { //큐브가 다 맞춰졌는지 체크
+    let result = true;
+    const flatCubeKeysArray = Object.keys(this.flatCube);
+    flatCubeKeysArray.forEach(key => {
+      if (!this.checkForSameValueInArray(this.flatCube[key])) {
+        result = false;
+      }
+    })
+    return result;
+  }
+
+  checkForSameValueInArray(array) { //이중배열의 값이 같은지 체크
+    return array.flat().every((value, _, arr) => value === arr[0]);
+  }
 }
 
 //Node.js 실행 모듈
@@ -193,13 +208,16 @@ const useModule = ({ cubeModel }, { count, time }) => {
       if (element.toUpperCase() === 'Q') {
         console.log(`경과시간: ${(new Date(Date.now() - time))
           .toISOString().slice(14, 19)}`);
-        console.log(`조작갯수: ${count}`)
+        console.log(`조작갯수: ${count}`);
         rl.close();
-      } 
+      }
       count++;
       console.log(element);
       cubeModel.printFlatCube();
       console.log(); //한줄 띄어서 쓰기용
+      if (!cubeModel.checkComplete()) { // 큐브가 다 맞춰졌는지 체크
+        console.log(11)
+      }
     })
     rl.prompt();
   })
@@ -230,5 +248,6 @@ const convertInputToArray = (line) => {
 const run = { count: 0, time: Date.now() };
 const cubeModel = new CubeModel();
 cubeModel.printFlatCube();
-console.log(); //한줄 띄어서 쓰기용
+console.log('M 입력시 무작위로 섞음');
 useModule({ cubeModel }, run);
+// console.log(Object.keys(cubeModel.flatCube))
