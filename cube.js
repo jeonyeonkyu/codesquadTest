@@ -21,7 +21,8 @@ class CubeModel {
       'U\'': () => this.changeU(this.flatCube, '-90'),
       'D': () => this.changeD(this.flatCube, '90'),
       'D\'': () => this.changeD(this.flatCube, '-90'),
-      'Q': () => console.log('Bye~')
+      'Q': () => console.log('Bye~'),
+      'M': () => this.mixRandomCube()
     }
   }
 
@@ -143,6 +144,16 @@ class CubeModel {
     })
   }
 
+  mixRandomCube() { //큐브 섞기
+    const inputKeyArray = Object.keys(this.inputWord);
+    inputKeyArray.pop(); //마지막 요소인 'Q'를 제거
+    const randomNumber = Math.ceil(Math.random() * 20);
+    for (let i = 0; i < randomNumber; i++) {
+      const randomKey = Math.floor(Math.random() * 12);
+      this.inputWord[inputKeyArray[randomKey]]();
+    }
+  }
+
   printFlatCube() { //큐브 출력하기
     this.flatCube[Object.keys(this.flatCube)[0]].forEach(element => {
       process.stdout.write('        ');
@@ -184,7 +195,7 @@ const useModule = ({ cubeModel }, { count, time }) => {
           .toISOString().slice(14, 19)}`);
         console.log(`조작갯수: ${count}`)
         rl.close();
-      }
+      } 
       count++;
       console.log(element);
       cubeModel.printFlatCube();
