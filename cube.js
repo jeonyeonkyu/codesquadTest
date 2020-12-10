@@ -146,7 +146,8 @@ class CubeModel {
 
   mixRandomCube() { //큐브 섞기
     const inputKeyArray = Object.keys(this.inputWord);
-    inputKeyArray.pop(); //마지막 요소인 'Q'를 제거
+    inputKeyArray.pop(); //마지막 요소인 'M'을 제거
+    inputKeyArray.pop(); //Q를 제거
     const randomNumber = Math.ceil(Math.random() * 20);
     for (let i = 0; i < randomNumber; i++) {
       const randomKey = Math.floor(Math.random() * 12);
@@ -191,63 +192,84 @@ class CubeModel {
   }
 }
 
-//Node.js 실행 모듈
-const useModule = ({ cubeModel }, { count, time }) => {
-  const readline = require('readline');
-  const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-  });
-  rl.setPrompt('CUBE> ');
-  rl.prompt();
-  rl.on("line", (line) => {
-    console.log(); //한줄 띄어서 쓰기용
-    const lineArray = convertInputToArray(line);
-    lineArray.forEach((element) => {
-      cubeModel.inputWord[element.toUpperCase()]();
-      if (element.toUpperCase() === 'Q') {
-        console.log(`경과시간: ${(new Date(Date.now() - time))
-          .toISOString().slice(14, 19)}`);
-        console.log(`조작갯수: ${count}`);
-        rl.close();
-      }
-      count++;
-      console.log(element);
-      cubeModel.printFlatCube();
-      console.log(); //한줄 띄어서 쓰기용
-      if (!cubeModel.checkComplete()) { // 큐브가 다 맞춰졌는지 체크
-        console.log(11)
-      }
-    })
-    rl.prompt();
-  })
-  rl.on("close", () => {
-    process.exit();
-  })
-}
-
-const convertInputToArray = (line) => {
-  const result = [];
-  for (let i = 0; i < line.length; i++) {
-    if (line[i + 1] && line[i + 1] === '\'') {
-      result.push(line.substring(i, i + 2));
-      i++;
-    } else if (line[i + 1] && line[i + 1] === '2') {
-      result.push(line[i]);
-      result.push(line[i]);
-      i++;
-    } else {
-      result.push(line[i]);
-    }
+class UseModule {
+  constructor({ cubeModel }, { count, time }) {
+    this.readline = require('readline');
+    this.rl = this.readline.createInterface({
+      input: process.stdin,
+      output: process.stdout
+    });
+    this.cubeModel = cubeModel;
+    this.count = count;
+    this.time = time;
   }
-  return result;
-}
 
+  init() {
+    console.log('M 입력시 무작위로 섞음');
+    this.rl.setPrompt('CUBE> ');
+    this.rl.prompt();
+    this.receiveInput();
+    this.closeModule();
+  }
+
+  receiveInput() { //입력받은 문자열 읽기
+    this.rl.on("line", (line) => {
+      console.log(); //한줄 띄어서 쓰기용
+      const lineArray = this.convertInputToArray(line);
+      lineArray.forEach((element) => {
+        this.cubeModel.inputWord[element.toUpperCase()]();
+        this.count++;
+        console.log(element);
+        this.cubeModel.printFlatCube();
+        console.log(); //한줄 띄어서 쓰기용
+        if (this.checkWhetherToEnd(element)) this.rl.close();
+      })
+      this.rl.prompt();
+    })
+  }
+
+  checkWhetherToEnd(element) { //종료 여부 체크
+    if (element.toUpperCase() === 'Q') {
+      this.count--;
+      return true;
+    } else if (this.cubeModel.checkComplete()) {
+      console.log('축하합니다 모든 면을 맞추셨습니다');
+      return true;
+    }
+    return false;
+  }
+
+  closeModule() { //모듈 종료
+    this.rl.on("close", () => {
+      console.log(`경과시간: ${(new Date(Date.now() - this.time))
+        .toISOString().slice(14, 19)}`);
+      console.log(`조작갯수: ${this.count}`);
+      console.log('이용해주셔서 감사합니다. 뚜뚜뚜.');
+      process.exit();
+    })
+  }
+
+  convertInputToArray = (line) => { //입력받은 문자열을 배열에 담기
+    const result = [];
+    for (let i = 0; i < line.length; i++) {
+      if (line[i + 1] && line[i + 1] === '\'') {
+        result.push(line.substring(i, i + 2));
+        i++;
+      } else if (line[i + 1] && line[i + 1] === '2') {
+        result.push(line[i]);
+        result.push(line[i]);
+        i++;
+      } else {
+        result.push(line[i]);
+      }
+    }
+    return result;
+  }
+}
 
 //Node.js 실행하기
 const run = { count: 0, time: Date.now() };
 const cubeModel = new CubeModel();
 cubeModel.printFlatCube();
-console.log('M 입력시 무작위로 섞음');
-useModule({ cubeModel }, run);
-// console.log(Object.keys(cubeModel.flatCube))
+const useModule = new UseModule({ cubeModel }, run);
+useModule.init();
